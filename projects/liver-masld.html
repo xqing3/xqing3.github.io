@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Single-Cell Transcriptomics of Liver Immune Cells in MASLD · Xin (Crystal) Qing</title>
+  <meta name="description" content="An end-to-end single-cell RNA-seq analysis of liver non-parenchymal cells from germ-free and SPF mice fed high-fat ± cholesterol diets.">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="name" href="../index.html">Xin (Crystal) Qing</a>
+    <nav>
+      <a href="../index.html#projects">Projects</a>
+      <a href="../index.html#publications">Publications</a>
+      <a href="../index.html#about">About</a>
+      <a href="../Xin_Qing_CV.pdf">CV</a>
+      <a href="https://github.com/xqing3">GitHub</a>
+      <a href="https://www.linkedin.com/in/xin-crystal-qing-01a445180/">LinkedIn</a>
+      <a href="https://orcid.org/0000-0002-3579-706X">ORCID</a>
+    </nav>
+  </header>
+  <main>
+<p class="back"><a href="../index.html#projects">← All projects</a></p>
+<header class="project-head is-featured">
+<p class="eyebrow">Featured project</p>
+<h1>Single-Cell Transcriptomics of Liver Immune Cells in MASLD</h1>
+<ul class="tags"><li class="tag" style="--tag:#2f9e6b">Wet lab &amp; metabolism</li><li class="tag" style="--tag:#3b72c4">Omics &amp; bioinformatics</li><li class="tag" style="--tag:#8a4fb3">Machine learning</li></ul>
+<p class="lede">An end-to-end single-cell RNA-seq analysis of liver non-parenchymal cells from germ-free and SPF mice fed high-fat ± cholesterol diets.</p>
+<p class="meta">2025 – Present</p>
+</header>
+<section id="problem">
+<h2>Problem</h2>
+<p>Diet and the gut microbiome both shape metabolic dysfunction-associated steatotic liver disease (MASLD). This study asks how they act together on the liver&#39;s non-parenchymal and immune cells, using a 2×2 diet × microbiome design: germ-free or SPF (microbiome-colonized) mice, each fed a high-fat diet with or without added cholesterol.</p>
+</section>
+<section id="approach">
+<h2>Approach</h2>
+<p>I built an end-to-end scRNA-seq pipeline in Python and Scanpy for the 10x Genomics data: QC, Scrublet doublet removal, highly variable gene selection, PCA, batch integration, UMAP, Leiden clustering, and Wilcoxon marker discovery. Cell types were annotated two ways, automatically with CellTypist (Healthy Mouse Liver model) and manually from marker genes, and the two were benchmarked against each other. Differential expression is pseudobulk, with mice as replicates, so that cell-level pseudoreplication and shifts in cell-type composition do not produce false positives. A separate hepatocyte-specific workflow adds DecontX ambient-RNA correction, LOESS-based QC, and reference- and marker-gated (Alb⁺/CD45⁻) filtering of immune contamination, and checks GSEA stability across GO and KEGG gene-set libraries.</p>
+<figure class="diagram" data-diagram="diet-microbiome-2x2">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 372" role="img" aria-labelledby="d2x2-title d2x2-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" fill="currentColor">
+  <title id="d2x2-title">2×2 diet × microbiome design</title>
+  <desc id="d2x2-desc">Germ-free or SPF (microbiome-colonized) mice, each fed a high-fat diet or a high-fat diet with added cholesterol. The Trem2⁺/Gpnmb⁺/Cd9⁺ macrophage state was enriched in colonized, cholesterol-fed mice.</desc>
+
+  <!-- Column headers: diet -->
+  <g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round">
+    <rect x="207" y="12" width="22" height="12" rx="4" fill="currentColor" fill-opacity="0.08"/>
+    <rect x="374" y="12" width="22" height="12" rx="4" fill="currentColor" fill-opacity="0.08"/>
+    <path d="M410 11 L415.2 14 L415.2 20 L410 23 L404.8 20 L404.8 14 Z M415.2 14 L420.4 11 L425.6 14 L425.6 20 L420.4 23 L415.2 20" stroke="#f2b84b" stroke-width="2"/>
+  </g>
+  <text x="218" y="48" font-size="16" font-weight="600" text-anchor="middle">High-fat diet</text>
+  <text x="410" y="48" font-size="16" font-weight="600" text-anchor="middle">High-fat + cholesterol</text>
+
+  <!-- Row headers: microbiome -->
+  <g fill="none" stroke="#2f9e6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="47" y="102" width="20" height="11" rx="5.5" fill="#2f9e6b" fill-opacity="0.15"/>
+    <path d="M67 107.5 q4 -4 8 0 t8 0"/>
+    <path d="M42 120 L82 96" stroke="currentColor" stroke-width="1.75"/>
+    <rect x="34" y="250" width="20" height="11" rx="5.5" fill="#2f9e6b" fill-opacity="0.15"/>
+    <rect x="62" y="240" width="20" height="11" rx="5.5" fill="#2f9e6b" fill-opacity="0.15" transform="rotate(-25 72 245.5)"/>
+    <rect x="58" y="262" width="20" height="11" rx="5.5" fill="#2f9e6b" fill-opacity="0.15" transform="rotate(15 68 267.5)"/>
+  </g>
+  <text x="60" y="146" font-size="16" font-weight="600" text-anchor="middle">Germ-free</text>
+  <text x="60" y="164" font-size="13" text-anchor="middle" fill-opacity="0.7">no microbiome</text>
+  <text x="60" y="298" font-size="16" font-weight="600" text-anchor="middle">SPF</text>
+  <text x="60" y="316" font-size="13" text-anchor="middle" fill-opacity="0.7">colonized</text>
+
+  <!-- Cells -->
+  <g stroke="currentColor" stroke-opacity="0.28" stroke-width="1.25" fill="currentColor" fill-opacity="0.035">
+    <rect x="128" y="64" width="180" height="140" rx="6"/>
+    <rect x="320" y="64" width="180" height="140" rx="6"/>
+    <rect x="128" y="216" width="180" height="140" rx="6"/>
+  </g>
+  <rect x="320" y="216" width="180" height="140" rx="6" fill="#f2b84b" fill-opacity="0.13" stroke="#f2b84b" stroke-width="2.5"/>
+
+  <!-- Shared icons: mouse (facing right) and liver -->
+  <defs>
+    <g id="d2x2-mouse" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-24 6 Q-24 -14 0 -14 Q16 -14 28 4 Q14 10 -2 10 L-20 10 Q-24 10 -24 6 Z" fill="currentColor" fill-opacity="0.08"/>
+      <circle cx="8" cy="-14" r="6" fill="currentColor" fill-opacity="0.08"/>
+      <circle cx="17" cy="-3" r="1.6" fill="currentColor" stroke="none"/>
+      <path d="M-24 6 C-34 9 -36 -2 -44 2"/>
+      <path d="M-12 10 v4 M10 10 v4"/>
+    </g>
+    <g id="d2x2-liver" fill="#2f9e6b" fill-opacity="0.2" stroke="#2f9e6b" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-22 -8 C-14 -18 14 -18 24 -12 C30 -8 26 0 18 4 C8 10 -6 14 -16 10 C-26 6 -28 -2 -22 -8 Z"/>
+      <path d="M2 -14 C0 -4 2 4 6 8" fill="none"/>
+    </g>
+    <g id="d2x2-microbes" fill="#2f9e6b" fill-opacity="0.15" stroke="#2f9e6b" stroke-width="1.75">
+      <rect x="-20" y="-4" width="14" height="8" rx="4"/>
+      <rect x="2" y="-4" width="14" height="8" rx="4" transform="rotate(-20 9 0)"/>
+    </g>
+  </defs>
+  <use href="#d2x2-mouse" x="186" y="116"/>
+  <use href="#d2x2-liver" x="262" y="116"/>
+  <use href="#d2x2-mouse" x="378" y="116"/>
+  <use href="#d2x2-liver" x="454" y="116"/>
+  <use href="#d2x2-mouse" x="186" y="268"/>
+  <use href="#d2x2-liver" x="262" y="268"/>
+  <use href="#d2x2-microbes" x="190" y="300"/>
+  <use href="#d2x2-mouse" x="378" y="258"/>
+  <use href="#d2x2-liver" x="454" y="258"/>
+  <use href="#d2x2-microbes" x="382" y="288"/>
+
+  <text x="410" y="322" font-size="14" font-weight="600" text-anchor="middle">Trem2⁺/Gpnmb⁺/Cd9⁺</text>
+  <text x="410" y="341" font-size="13" text-anchor="middle">macrophage state enriched</text>
+</svg>
+<figcaption>Study design, redrawn by me: microbiome status (germ-free or SPF) × diet (high-fat, or high-fat + cholesterol). The design follows the foundation study by Hermanson et al. 2026, <em>Gut Microbes</em> (Leone lab), <a href="https://doi.org/10.1080/19490976.2026.2668121" rel="noopener">https://doi.org/10.1080/19490976.2026.2668121</a>.</figcaption>
+</figure>
+<figure class="diagram" data-diagram="scrna-pipeline">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 566" role="img" aria-labelledby="dpipe-title dpipe-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" fill="currentColor">
+  <title id="dpipe-title">scRNA-seq analysis pipeline</title>
+  <desc id="dpipe-desc">Liver non-parenchymal cells from 10x Genomics (180,152 cells) pass through quality control, Scrublet doublet removal, highly variable gene selection, PCA, batch integration, UMAP, Leiden clustering, marker discovery and annotation, and pseudobulk differential expression; 143,221 cells × 27,120 genes are kept.</desc>
+
+  <defs>
+    <g id="dpipe-liver" fill="#2f9e6b" fill-opacity="0.2" stroke="#2f9e6b" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-22 -8 C-14 -18 14 -18 24 -12 C30 -8 26 0 18 4 C8 10 -6 14 -16 10 C-26 6 -28 -2 -22 -8 Z"/>
+      <path d="M2 -14 C0 -4 2 4 6 8" fill="none"/>
+    </g>
+    <g id="dpipe-cell" stroke="#3b72c4" stroke-width="2" stroke-linejoin="round">
+      <circle r="13" fill="#3b72c4" fill-opacity="0.15"/>
+      <path d="M-6 -3 C-6 -8 3 -8 5 -4 C6 -1 3 0 3 3 C3 6 -6 6 -6 -3 Z" fill="#3b72c4" fill-opacity="0.45"/>
+    </g>
+    <path id="dpipe-chev" d="M-5 -2 L0 2 L5 -2" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  </defs>
+
+  <!-- Input -->
+  <rect x="24" y="12" width="432" height="58" rx="6" fill="currentColor" fill-opacity="0.04" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.25"/>
+  <use href="#dpipe-liver" x="62" y="42"/>
+  <text x="100" y="37" font-size="15" font-weight="600">Liver non-parenchymal cells</text>
+  <text x="100" y="58" font-size="14" fill-opacity="0.75">10x Genomics · 180,152 cells</text>
+  <use href="#dpipe-chev" x="152" y="84"/>
+
+  <!-- Steps -->
+  <g fill="#3b72c4" fill-opacity="0.12" stroke="#3b72c4" stroke-width="1.5">
+    <rect x="24" y="96" width="256" height="32" rx="16"/>
+    <rect x="24" y="138" width="256" height="32" rx="16"/>
+    <rect x="24" y="180" width="256" height="32" rx="16"/>
+    <rect x="24" y="222" width="256" height="32" rx="16"/>
+    <rect x="24" y="264" width="256" height="32" rx="16"/>
+    <rect x="24" y="306" width="256" height="32" rx="16"/>
+    <rect x="24" y="348" width="256" height="32" rx="16"/>
+    <rect x="24" y="390" width="256" height="32" rx="16"/>
+    <rect x="24" y="432" width="256" height="32" rx="16"/>
+  </g>
+  <g font-size="15" text-anchor="middle">
+    <text x="152" y="117">Quality control</text>
+    <text x="152" y="159">Scrublet doublet removal</text>
+    <text x="152" y="201">Highly variable genes</text>
+    <text x="152" y="243">PCA</text>
+    <text x="152" y="285">Batch integration</text>
+    <text x="152" y="327">UMAP</text>
+    <text x="152" y="369">Leiden clustering</text>
+    <text x="152" y="411">Markers &amp; annotation</text>
+    <text x="152" y="453" font-weight="600">Pseudobulk DE</text>
+  </g>
+  <use href="#dpipe-chev" x="152" y="134"/>
+  <use href="#dpipe-chev" x="152" y="176"/>
+  <use href="#dpipe-chev" x="152" y="218"/>
+  <use href="#dpipe-chev" x="152" y="260"/>
+  <use href="#dpipe-chev" x="152" y="302"/>
+  <use href="#dpipe-chev" x="152" y="344"/>
+  <use href="#dpipe-chev" x="152" y="386"/>
+  <use href="#dpipe-chev" x="152" y="428"/>
+
+  <!-- Side notes (brackets) -->
+  <g fill="none" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.25">
+    <path d="M292 100 h6 v66 h-6"/>
+    <path d="M292 184 h6 v192 h-6"/>
+    <path d="M292 394 h6 v24 h-6"/>
+    <path d="M292 436 h6 v24 h-6"/>
+  </g>
+  <g font-size="13.5">
+    <text x="308" y="126">QC and doublet</text>
+    <text x="308" y="144">filtering</text>
+    <text x="308" y="276">Embedding and</text>
+    <text x="308" y="294">clusters</text>
+    <text x="308" y="403">Wilcoxon markers;</text>
+    <text x="308" y="420">CellTypist vs manual</text>
+    <text x="308" y="445">Mice as replicates,</text>
+    <text x="308" y="462">2×2 design</text>
+  </g>
+
+  <!-- Output -->
+  <use href="#dpipe-chev" x="152" y="476"/>
+  <rect x="24" y="488" width="432" height="68" rx="6" fill="#f2b84b" fill-opacity="0.13" stroke="#f2b84b" stroke-width="2"/>
+  <use href="#dpipe-cell" x="54" y="522"/>
+  <text x="80" y="514" font-size="14" fill-opacity="0.8">143,221 cells × 27,120 genes kept</text>
+  <text x="80" y="538" font-size="15" font-weight="600">Trem2⁺/Gpnmb⁺/Cd9⁺ macrophage state</text>
+</svg>
+<figcaption>The scRNA-seq pipeline I built, from raw 10x Genomics counts to pseudobulk differential expression.</figcaption>
+</figure>
+</section>
+<section id="results">
+<h2>Key results</h2>
+<ul>
+<li>180,152 → 143,221 cells × 27,120 genes carried through QC, doublet removal and clustering.</li>
+<li>A Trem2⁺/Gpnmb⁺/Cd9⁺ disease-associated macrophage state, enriched in microbiome-colonized, cholesterol-fed mice.</li>
+<li>Automated CellTypist annotation benchmarked against manual marker-based annotation.</li>
+<li>Pseudobulk differential expression with mice as replicates, guarding against pseudoreplication and composition-driven false positives across the 2×2 design.</li>
+</ul>
+</section>
+<section id="my-role">
+<h2>My role</h2>
+<div class="role">
+<ul>
+<li>Mouse work, as part of a small team: oral gavage, blood collection, fecal collection, euthanasia and tissue collection.</li>
+<li>Built the scRNA-seq analysis pipeline end to end, from QC and Scrublet doublet removal through batch integration, Leiden clustering and Wilcoxon marker discovery.</li>
+<li>Benchmarked CellTypist annotation against manual marker-based annotation and identified the Trem2⁺/Gpnmb⁺/Cd9⁺ macrophage state.</li>
+<li>Set up pseudobulk differential expression with mice as replicates for the 2×2 diet × microbiome design.</li>
+<li>Designed the hepatocyte-specific workflow (DecontX, LOESS-based QC, Alb⁺/CD45⁻ gating) and the GSEA stability checks.</li>
+</ul>
+</div>
+<p class="team">The mouse work was a small-team effort in the lab. Cell isolation, single-cell library preparation and sequencing are not my work.</p>
+</section>
+<section id="cell-communication">
+<h2>CellChat vs CellPhoneDB</h2>
+<p>A side analysis on experimental single-cell data: how differences in the mathematical frameworks of CellChat and CellPhoneDB change the cell–cell communication they infer from single-cell RNA-seq data in diet-induced liver disease.</p>
+<ul class="links">
+<li><a href="https://github.com/xqing3/CellChat_vs_CellPhoneDB_Using_Experimental_Single-Cell_Data" rel="noopener">Code: CellChat vs CellPhoneDB on experimental single-cell data</a></li>
+</ul>
+</section>
+<section id="tools">
+<h2>Tools</h2>
+<p class="tools">Python, Scanpy</p>
+</section>
+<section id="links">
+<h2>Links</h2>
+<ul class="links">
+<li><a href="https://doi.org/10.1080/19490976.2026.2668121" rel="noopener">Foundation study for the 2×2 design: Hermanson et al. 2026, Gut Microbes (Leone lab)</a></li>
+</ul>
+</section>
+  </main>
+  <footer>© 2026 Xin (Crystal) Qing</footer>
+</body>
+</html>
