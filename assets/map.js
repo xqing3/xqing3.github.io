@@ -69,4 +69,14 @@
     dot.addEventListener('pointerdown', function (e) { dot._lastPointer = e.pointerType; });
     // A touch that never becomes a click (scroll, cancel) must not leave a stale flag for keyboard Enter.
     dot.addEventListener('pointercancel', function () { dot._lastPointer = null; });
-    dot.addEventListener('pointerup', function 
+    dot.addEventListener('pointerup', function () {
+      setTimeout(function () { dot._lastPointer = null; }, 400);
+    });
+  });
+  document.addEventListener('pointerdown', function (e) {
+    if (!e.target.closest || !e.target.closest('a.dot')) clear();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') clear();
+  });
+})();
